@@ -1,25 +1,40 @@
 import { AxiosRequestConfig } from '../types'
+import { isPlainObject, deepMerge } from '../helpers/util'
 
-let strategies = Object.create(null)
+let strats = Object.create(null)
 
-function defaultStrategy(val1: any, val2: any): any {
+function defaultStrat(val1: any, val2: any): any {
   return typeof val2 !== 'undefined' ? val2 : val1
 }
 
-function fromVal2Strategy(va1: any, val2: any): any {
+function fromVal2Strat(va1: any, val2: any): any {
   if (typeof val2 !== 'undefined') {
     return val2
   }
 }
 
-function deepMergeStrategy(va1: any, val2: any): any {
-  //
+function deepMergeStrat(val1: any, val2: any): any {
+  if (isPlainObject(val2)) {
+    return deepMerge(val1, val2)
+  } else if (typeof val2 !== 'undefined') {
+    return val2
+  } else if (isPlainObject(val1)) {
+    return deepMerge(val1)
+  } else if (typeof val1 !== 'undefined') {
+    return val1
+  }
 }
 
-const strategyFromVal2 = ['url', 'params', 'data']
+const stratKeysFromVal2 = ['url', 'params', 'data']
 
-strategyFromVal2.forEach(key => {
-  strategies[key] = fromVal2Strategy
+stratKeysFromVal2.forEach(key => {
+  strats[key] = fromVal2Strat
+})
+
+const stratKeysDeepMerge = ['headers']
+
+stratKeysDeepMerge.forEach(key => {
+  strats[key] = deepMergeStrat
 })
 
 export default function mergeConfig(
@@ -43,8 +58,8 @@ export default function mergeConfig(
   }
 
   function mergeField(key: string): void {
-    const strategy = strategies[key] || defaultStrategy
-    config[key] = strategy(config1[key], config2![key])
+    const strat = strats[key] || defaultStrat
+    config[key] = strat(config1[key], config2![key])
   }
 
   return config
