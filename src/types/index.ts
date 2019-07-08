@@ -28,9 +28,6 @@ export interface Axios {
   post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
   put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
   patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
-
-  transformRequest?: AxiosTransformer | AxiosTransformer[]
-  transformResponse?: AxiosTransformer | AxiosTransformer[]
 }
 
 export interface AxiosTransformer {
@@ -41,6 +38,11 @@ export interface AxiosInstance extends Axios {
 
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 }
+
+export interface AxiosStatic extends AxiosInstance {
+  create(config?: AxiosRequestConfig): AxiosInstance
+}
+
 export interface AxiosRequestConfig {
   url?: string
   method?: Method
@@ -49,6 +51,9 @@ export interface AxiosRequestConfig {
   headers?: any
   responseType?: XMLHttpRequestResponseType
   timeout?: number
+
+  transformRequest?: AxiosTransformer | AxiosTransformer[]
+  transformResponse?: AxiosTransformer | AxiosTransformer[]
 
   [propName: string]: any
 }

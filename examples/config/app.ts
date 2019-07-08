@@ -19,12 +19,39 @@ axios({
 
 
 axios({
+  transformRequest: [...(axios.defaults.transformRequest as AxiosTransformer[]), function (data, headers) {
+    headers.a = 1
+    return data
+  }],
   transformResponse: [...(axios.defaults.transformResponse as AxiosTransformer[]), function(data) {
     if (typeof data === 'object') {
       data.b = 2
     }
     return data
   }],
+  url: '/config/post',
+  method: 'post',
+  data: {
+    a: 1
+  }
+}).then((res) => {
+  console.log(res.data)
+})
+
+const instance = axios.create({
+  transformRequest: [...(axios.defaults.transformRequest as AxiosTransformer[]), function (data, headers) {
+    headers.a = 'create_a'
+    return data
+  }],
+  transformResponse: [...(axios.defaults.transformResponse as AxiosTransformer[]), function(data) {
+    if (typeof data === 'object') {
+      data.b = 'create_b'
+    }
+    return data
+  }]
+})
+
+instance({
   url: '/config/post',
   method: 'post',
   data: {
