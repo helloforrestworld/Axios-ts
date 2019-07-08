@@ -1,16 +1,22 @@
-import { CancelExecutor } from '../types'
+import { CancelExecutor, CancelTokenSource, Canceler, Cancel } from '../types'
+import CancelStatic from './Cancel'
 
 interface ResolvePromise {
-  (reason?: string): void
+  (reason?: Cancel): void
 }
 
 export default class CancelToken {
-  promise: Promise<string>
-  reason?: string
+  promise: Promise<Cancel>
+  reason?: Cancel
+  throwIfRequested(): void {
+    if (this.reason) {
+      throw this.reason
+    }
+  }
 
   constructor(executor: CancelExecutor) {
     let resolvePromise: ResolvePromise
-    this.promise = new Promise<string>(resolve => {
+    this.promise = new Promise<Cancel>(resolve => {
       resolvePromise = resolve
     })
 
@@ -18,8 +24,19 @@ export default class CancelToken {
       if (this.reason) {
         return
       }
-      this.reason = message
+      this.reason = new CancelStatic(message)
       resolvePromise(this.reason)
     })
+  }
+
+  static source(): CancelTokenSource {
+    let cancel!: Canceler
+    const token = new CancelToken(c => {
+      cancel = c
+    })
+    return {
+      token,
+      cancel
+    }
   }
 }
