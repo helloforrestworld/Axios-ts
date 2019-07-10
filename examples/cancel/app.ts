@@ -7,7 +7,7 @@ axios.get('/cancel/get', {
   cancelToken: source.token
 }).catch(function(e) {
   if (axios.isCancel(e)) {
-    console.log('Request canceled', e.message)
+    console.log('Request cance1led', e.message)
   }
 })
 
