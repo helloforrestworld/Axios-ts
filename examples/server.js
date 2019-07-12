@@ -4,7 +4,9 @@ const cookieParser = require('cookie-parser')
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
+const multipart = require('connect-multiparty')
 const WebpackConfig = require('./webpack.config')
+const path = require('path')
 
 require('./server2')
 
@@ -21,14 +23,15 @@ app.use(webpackDevMiddleware(compiler, {
 
 app.use(webpackHotMiddleware(compiler))
 
-app.use(express.static(__dirname))
-
 app.use(express.static(__dirname, {
-  setHeaders(res) {
-    res.cookie('XSRF-TOKEN-D', '123abc')
+  setHeaders (res) {
+    res.cookie('XSRF-TOKEN-D', '1234abc')
   }
 }))
 
+app.use(multipart({
+  uploadDir: path.resolve(__dirname, 'upload-file')
+}))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
@@ -50,6 +53,8 @@ registerConfigMergeRouter()
 registerCancelRouter()
 
 registerMoreRouter()
+
+registerProgressRouter()
 
 app.use(router)
 
@@ -183,5 +188,12 @@ function registerMoreRouter() {
   router.get('/more/get', function (req, res) {
     console.log('req.cookies: ', req.cookies)
     res.json(req.cookies)
+  })
+}
+
+function registerProgressRouter() {
+  router.post('/progress/upload', function(req, res) {
+    console.log(req.body, req.files)
+    res.end('upload success!')
   })
 }
