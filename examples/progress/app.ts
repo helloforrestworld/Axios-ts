@@ -10,7 +10,6 @@ function calculatePercentage(loaded: number, total: number) {
 function loadProgressBar() {
   const setupStartProgress = () => {
     instance.interceptors.request.use(config => {
-      console.log('NProgress start')
       NProgress.start()
       return config
     })
@@ -19,7 +18,6 @@ function loadProgressBar() {
   const setupUpdateProgress = () => {
     const update = (e: ProgressEvent) => {
       console.log(e)
-      console.log('calc: ', calculatePercentage(e.loaded, e.total))
       NProgress.set(calculatePercentage(e.loaded, e.total))
     }
     instance.defaults.onDownloadProgress = update
