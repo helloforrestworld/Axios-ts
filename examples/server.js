@@ -190,6 +190,11 @@ function registerMoreRouter() {
     res.json(req.cookies)
   })
 
+  router.get('/more/304', function(req, res) {
+    res.status(304)
+    res.end()
+  })
+
   router.post('/more/post', function (req, res) {
     res.json(req.body)
   })
