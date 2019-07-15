@@ -189,6 +189,10 @@ function registerMoreRouter() {
     console.log('req.cookies: ', req.cookies)
     res.json(req.cookies)
   })
+
+  router.post('/more/post', function (req, res) {
+    res.json(req.body)
+  })
 }
 
 function registerProgressRouter() {

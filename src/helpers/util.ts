@@ -42,7 +42,6 @@ export function deepMerge(...objArray: any[]): any {
       })
     }
   })
-
   return result
 }
 
