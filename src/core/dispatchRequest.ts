@@ -25,8 +25,8 @@ function transformResponseData(res: AxiosResponse): AxiosResponse {
 }
 
 function transformUrl(config: AxiosRequestConfig): string {
-  const { url, params } = config
-  return buildURL(url as string, params)
+  const { url, params, paramsSerializer } = config
+  return buildURL(url as string, params, paramsSerializer)
 }
 
 function transformHeaders(config: AxiosRequestConfig) {
