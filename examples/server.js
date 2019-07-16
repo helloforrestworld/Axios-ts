@@ -198,6 +198,14 @@ function registerMoreRouter() {
   router.post('/more/post', function (req, res) {
     res.json(req.body)
   })
+
+  router.get('/more/A', function (req, res) {
+    res.end('/more/A')
+  })
+
+  router.get('/more/B', function (req, res) {
+    res.end('/more/B')
+  })
 }
 
 function registerProgressRouter() {
