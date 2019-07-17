@@ -32,7 +32,7 @@ export default class Axios {
     }
   }
 
-  request(url: any, config?: AxiosRequestConfig): AxiosPromise {
+  request(url: any, config?: any): AxiosPromise {
     if (typeof url === 'string') {
       if (!config) {
         config = {}
@@ -43,7 +43,7 @@ export default class Axios {
     }
 
     config = mergeConfig(this.defaults, config)
-    config.method = config.method!.toLowerCase() as Method
+    config.method = config.method.toLowerCase()
 
     const chain: PromiseChain<any>[] = [
       {

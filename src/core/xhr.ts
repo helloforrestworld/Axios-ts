@@ -7,10 +7,10 @@ import cookie from '../helpers/cookie'
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
     const {
-      data = {},
-      method = 'get',
+      data = null,
+      method,
       url,
-      headers,
+      headers = {},
       responseType,
       timeout,
       cancelToken,
@@ -25,7 +25,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 
     const request = new XMLHttpRequest()
 
-    request.open(method.toLowerCase(), url as string, true)
+    request.open(method!.toUpperCase(), url as string, true)
 
     configureRequest()
 
