@@ -53,7 +53,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       }
 
       request.ontimeout = function handleTimeout() {
-        reject(createError(`Timeout of ${timeout} ms exceed`, config, 'ECONNABORTED', request))
+        reject(createError(`Timeout of ${timeout} ms exceeded`, config, 'ECONNABORTED', request))
       }
 
       if (onDownloadProgress) {

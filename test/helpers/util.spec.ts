@@ -121,54 +121,56 @@ describe('helpers: util', () => {
   })
 
   describe('isAbsoluteURL', () => {
-    test('should validate absoluteURL', () => {
-      const url = 'baidu.com'
-      expect(isAbsoluteURL(url)).toBeFalsy()
+    test('should return true if URL begins with valid scheme name', () => {
+      expect(isAbsoluteURL('https://api.github.com/users')).toBeTruthy()
+      expect(isAbsoluteURL('custom-scheme-v1.0://example.com/')).toBeTruthy()
+      expect(isAbsoluteURL('HTTP://example.com/')).toBeTruthy()
+    })
 
-      const url2 = 'www.baidu.com'
-      expect(isAbsoluteURL(url2)).toBeFalsy()
+    test('should return false if URL begins with invalid scheme name', () => {
+      expect(isAbsoluteURL('123://example.com/')).toBeFalsy()
+      expect(isAbsoluteURL('!valid://example.com/')).toBeFalsy()
+    })
 
-      const url3 = '//www.baidu.com'
-      expect(isAbsoluteURL(url3)).toBeTruthy()
+    test('should return true if URL is protocol-relative', () => {
+      expect(isAbsoluteURL('//example.com/')).toBeTruthy()
+    })
 
-      const url4 = 'https://www.baidu.com'
-      expect(isAbsoluteURL(url4)).toBeTruthy()
+    test('should return false if URL is relative', () => {
+      expect(isAbsoluteURL('/foo')).toBeFalsy()
+      expect(isAbsoluteURL('foo')).toBeFalsy()
     })
   })
 
   describe('combineURL', () => {
-    describe('normal combine', () => {
-      test('baseURL, relativeURL all got', () => {
-        const baseURL = 'https://www.baidu.com/api'
-        const relativeURL = '/abc/a'
-        expect(combineURL(baseURL, relativeURL)).toBe(baseURL + relativeURL)
-      })
+    test('should combine URL', () => {
+      expect(combineURL('https://api.github.com', '/users')).toBe('https://api.github.com/users')
     })
 
-    describe('special combine', () => {
-      test('should remove the rest of /', () => {
-        const baseURL = 'https://www.baidu.com/api/'
-        const relativeURL = '/abc/a'
-        expect(combineURL(baseURL, relativeURL)).toBe('https://www.baidu.com/api/abc/a')
-      })
+    test('should remove duplicate slashes', () => {
+      expect(combineURL('https://api.github.com/', '/users')).toBe('https://api.github.com/users')
+    })
 
-      test('should return baseURL while relativeURL is undefined', () => {
-        const baseURL = 'https://www.baidu.com/api/'
-        const relativeURL = ''
-        expect(combineURL(baseURL, relativeURL)).toBe('https://www.baidu.com/api/')
-      })
+    test('should insert missing slash', () => {
+      expect(combineURL('https://api.github.com', 'users')).toBe('https://api.github.com/users')
+    })
+
+    test('should not insert slash when relative url missing/empty', () => {
+      expect(combineURL('https://api.github.com/users', '')).toBe('https://api.github.com/users')
+    })
+
+    test('should allow a single slash for relative url', () => {
+      expect(combineURL('https://api.github.com/users', '/')).toBe('https://api.github.com/users/')
     })
   })
 
   describe('isURLSameOrigin', () => {
-    const requestURL = 'http://localhost/api/b'
-    test('should be the same origin', () => {
-      expect(isURLSameOrigin(requestURL)).toBeTruthy()
+    test('should detect same origin', () => {
+      expect(isURLSameOrigin(window.location.href)).toBeTruthy()
     })
 
-    const requestURL2 = 'http://www.baidu.com/api/b'
-    test('should not be the same origin', () => {
-      expect(isURLSameOrigin(requestURL2)).toBeFalsy()
+    test('should detect different origin', () => {
+      expect(isURLSameOrigin('https://github.com/axios/axios')).toBeFalsy()
     })
   })
 
