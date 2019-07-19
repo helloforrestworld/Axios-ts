@@ -4186,7 +4186,7 @@ git-raw-commits@^1.3.0:
   integrity sha1-J8NaMqZ3d8Hs1BKiOabBnXG5Wv8=
   dependencies:
     dargs "^4.0.1"
-    lodash.template "^4.0.2"
+    lodash.template "^4.5.0"
     meow "^4.0.0"
     split2 "^2.0.0"
     through2 "^2.0.0"
