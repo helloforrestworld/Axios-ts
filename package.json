@@ -2,7 +2,7 @@
   "name": "ts-axios-lib",
   "version": "1.0.0",
   "description": "",
-  "keywords": [],
+  "keywords": ["typescript", "ts", "axios", "ts-axios", "xhr", "http"],
   "main": "dist/axios.umd.js",
   "module": "dist/axios.es5.js",
   "typings": "dist/types/index.d.ts",
